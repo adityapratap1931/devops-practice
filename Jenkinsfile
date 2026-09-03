@@ -2,13 +2,9 @@ pipeline {
     agent any
 
     stages {
-
         stage('Build') {
             steps {
                 echo "Building application..."
-                echo "Job Name: ${env.JOB_NAME}"
-                echo "Build Number: ${env.BUILD_NUMBER}"
-                echo "Workspace: ${env.WORKSPACE}"
             }
         }
 
@@ -20,8 +16,22 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo "Deploying application..."
+                echo "Deploying to ${params.ENVIRONMENT}..."
             }
+        }
+    }
+
+    post {
+        success {
+            echo "BUILD SUCCESSFUL!"
+        }
+
+        failure {
+            echo "BUILD FAILED!"
+        }
+
+        always {
+            echo "Jenkins pipeline finished."
         }
     }
 }
