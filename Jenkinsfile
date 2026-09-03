@@ -9,6 +9,21 @@ pipeline {
             }
         }
 
+        stage('Credentials Test') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-creds',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_TOKEN'
+                    )
+                ]) {
+                    echo "GitHub username is: ${GIT_USER}"
+                    echo "GitHub token is securely loaded"
+                }
+            }
+        }
+
         stage('Test') {
             steps {
                 echo "Running tests..."
