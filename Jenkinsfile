@@ -6,21 +6,12 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building application..."
-            }
-        }
 
-        stage('Credentials Test') {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'git-creds',
-                        usernameVariable: 'GIT_USER',
-                        passwordVariable: 'GIT_TOKEN'
-                    )
-                ]) {
-                    echo "GitHub username is: ${GIT_USER}"
-                    echo "GitHub token is securely loaded"
-                }
+                sh '''
+                    echo "Build completed" > build.txt
+                    echo "Build Number: $BUILD_NUMBER" >> build.txt
+                    echo "Environment: $ENVIRONMENT" >> build.txt
+                '''
             }
         }
 
@@ -47,8 +38,8 @@ pipeline {
             echo "Pipeline completed successfully!"
         }
 
-        failure {
-            echo "Pipeline failed!"
+        always {
+            archiveArtifacts artifacts: 'build.txt', fingerprint: true
         }
     }
 }
