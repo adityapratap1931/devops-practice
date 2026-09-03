@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Build') {
             steps {
                 echo "Building application..."
@@ -15,23 +16,24 @@ pipeline {
         }
 
         stage('Deploy') {
+            when {
+                expression {
+                    params.ENVIRONMENT == 'prod'
+                }
+            }
             steps {
-                echo "Deploying to ${params.ENVIRONMENT}..."
+                echo "Deploying to PRODUCTION..."
             }
         }
     }
 
     post {
         success {
-            echo "BUILD SUCCESSFUL!"
+            echo "Pipeline completed successfully!"
         }
 
         failure {
-            echo "BUILD FAILED!"
-        }
-
-        always {
-            echo "Jenkins pipeline finished."
+            echo "Pipeline failed!"
         }
     }
 }
