@@ -1,32 +1,22 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = 'devops-app'
+        ENVIRONMENT = 'production'
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building application...'
-            }
-        }
-
-        stage('Tests') {
-            parallel {
-                stage('Unit Test') {
-                    steps {
-                        echo 'Running Unit Tests...'
-                    }
-                }
-
-                stage('Security Test') {
-                    steps {
-                        echo 'Running Security Tests...'
-                    }
-                }
+                echo "Building ${env.APP_NAME}"
+                echo "Environment: ${env.ENVIRONMENT}"
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying application...'
+                echo "Deploying ${env.APP_NAME} to ${env.ENVIRONMENT}"
             }
         }
     }
