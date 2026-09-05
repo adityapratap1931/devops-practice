@@ -2,26 +2,28 @@ pipeline {
     agent any
 
     stages {
+
         stage('Build') {
             steps {
-                echo 'Creating build file...'
-
-                sh '''
-                    echo "Hello from Build stage" > app.txt
-                '''
-
-                stash name: 'my-app', includes: 'app.txt'
+                echo 'Building application...'
             }
         }
 
         stage('Test') {
             steps {
-                unstash 'my-app'
+                echo 'Running tests...'
+            }
+        }
 
-                sh '''
-                    echo "Testing app..."
-                    cat app.txt
-                '''
+        stage('Approval') {
+            steps {
+                input message: 'Production deploy karna hai?', ok: 'Approve'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
             }
         }
     }
