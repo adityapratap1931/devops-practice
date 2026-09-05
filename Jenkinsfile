@@ -4,24 +4,24 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building application...'
+                echo 'Creating build file...'
 
                 sh '''
-                    echo "Hello from Jenkins Workspace" > workspace.txt
-                    echo "Build Number: $BUILD_NUMBER" >> workspace.txt
+                    echo "Hello from Build stage" > app.txt
                 '''
+
+                stash name: 'my-app', includes: 'app.txt'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-            }
-        }
+                unstash 'my-app'
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
+                sh '''
+                    echo "Testing app..."
+                    cat app.txt
+                '''
             }
         }
     }
