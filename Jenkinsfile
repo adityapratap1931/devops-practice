@@ -2,22 +2,25 @@ pipeline {
     agent any
 
     stages {
-
         stage('Build') {
             steps {
                 echo 'Building application...'
             }
         }
 
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-            }
-        }
+        stage('Tests') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        echo 'Running Unit Tests...'
+                    }
+                }
 
-        stage('Approval') {
-            steps {
-                input message: 'Production deploy karna hai?', ok: 'Approve'
+                stage('Security Test') {
+                    steps {
+                        echo 'Running Security Tests...'
+                    }
+                }
             }
         }
 
